@@ -1,0 +1,98 @@
+*******************************************************************************
+1°) Les jointures internes
+*******************************************************************************
+SELECT * 
+FROM personnage
+INNER JOIN classe ON personnage.idClasse = classe.idClasse
+
+SELECT nom, levelMin,libelle,estDistance 
+FROM arme
+INNER JOIN typearme ON arme.idTypeArme = typearme.idTypeArme
+
+***********************************************************************************
+2°) Les jointures et surnoms de tables
+***********************************************************************************
+SELECT personnage.nom, classe.nom
+FROM personnage
+INNER JOIN classe ON personnage.idClasse = classe.idClasse
+
+SELECT p.nom, a.nom,a.levelMin, a.degat
+FROM personnage p
+INNER JOIN arme a  ON p.idArmeUtilise = a.idArme
+
+SELECT p.nom, a.nom,a.levelMin, a.degat, t.libelle AS "Type arme", t.estDistance
+FROM personnage p
+INNER JOIN arme a  ON p.idArmeUtilise = a.idArme
+INNER JOIN typearme t ON t.idTypeArme = a.idTypeArme
+
+**************************************************************************************
+3°) Jointures er filtres
+**************************************************************************************
+SELECT p.nom AS "Nom personnage", level, a.nom AS "Arme",a.levelMin
+FROM personnage p
+INNER JOIN dispose d  ON p.idPersonnage = d.idPersonnage
+INNER JOIN arme a ON a.idArme = d.idArme
+
+SELECT a.nom, a.levelMin,a.degat,t.libelle AS "Type"
+FROM arme a
+INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+WHERE t.estDistance = false
+
+SELECT p.nom AS "Personnage", a.nom AS "Arme utilisée", t.libelle AS "Type d'arme"
+FROM personnage p
+INNER JOIN classe c ON p.idClasse = c.idClasse
+INNER JOIN arme a ON a.idArme = p.idArmeUtilise
+INNER JOIN typearme t ON t.idTypeArme = a.idTypeArme
+WHERE c.nom = "Guerrier"
+
+***************************************************************************************
+4°) Jointures, calculs et tris
+***************************************************************************************
+SELECT p.idPersonnage, p.nom AS "Perso", a.nom AS "Arme",t.libelle AS "Type"
+FROM personnage p
+INNER JOIN dispose d on d.idPersonnage = p.idPersonnage
+INNER JOIN arme a on a.idArme = d.idArme
+INNER JOIN typearme t on t.idTypeArme = a.idTypeArme
+WHERE level = 10
+
+SELECT p.idPersonnage, p.nom AS "Perso", a.nom AS "Arme",t.libelle AS "Type"
+FROM personnage p
+INNER JOIN dispose d on d.idPersonnage = p.idPersonnage
+INNER JOIN arme a on a.idArme = d.idArme
+INNER JOIN typearme t on t.idTypeArme = a.idTypeArme
+WHERE p.level = 10
+ORDER BY p.idPersonnage
+
+SELECT AVG(degat) AS "Moyenne de dégat des armes à distance"
+FROM arme a
+INNER JOIN typearme t on a.idTypeArme = t.idTypeArme
+WHERE t.estDistance = true
+
+SELECT DISTINCT p.nom
+FROM personnage p
+INNER JOIN dispose d ON p.idPersonnage = d.idPersonnage
+INNER JOIN arme a ON a.idArme = d.idArme
+INNER JOIN typearme t on t.idTypeArme = a.idTypeArme
+WHERE t.libelle LIKE "A%"
+
+******************************************************************************************************
+5°) Les jointures externes
+******************************************************************************************************
+SELECT t.libelle AS "Type", a.nom AS "Arme"
+FROM typearme t
+LEFT JOIN arme a ON a.idTypeArme = t.idTypeArme
+
+SELECT t.libelle AS "Type", a.nom AS "Arme"
+FROM arme a
+RIGHT JOIN typearme t ON a.idTypeArme = t.idTypeArme
+
+SELECT * 
+FROM arme a
+LEFT JOIN personnage p ON a.idArme = p.idArmeUtilise
+ORDER BY a.levelMin
+
+SELECT a.idArme, a.nom AS "Nom", p.nom AS "Personnage"
+FROM personnage p
+RIGHT JOIN dispose d ON d.idPersonnage = p.idPersonnage
+RIGHT JOIN arme a ON a.idArme = d.idArme
+ORDER BY a.idArme

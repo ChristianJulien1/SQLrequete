@@ -1,0 +1,27 @@
+1°)
+SELECT * 
+FROM personnage p
+WHERE p.dateNaissance> "2002-01-01"
+
+2°)
+SELECT nom, YEAR(dateNaissance) AS "année Naissance" 
+FROM personnage
+
+3°)
+
+SELECT nom, (CONVERT(DATEDIFF(now(),dateNaissance)/365,SIGNED INTEGER) )
+AS "AGE"
+FROM personnage
+
+4°)
+SELECT AVG(date1.AGE)
+FROM
+(SELECT nom, DATEDIFF(now(),dateNaissance)/365 AS "AGE"
+FROM personnage) date1
+
+5°)
+SELECT date1.nom,date1.AGE
+FROM
+(SELECT nom, DATEDIFF(now(),dateNaissance)/365 AS "AGE"
+FROM personnage) date1
+WHERE date1.AGE >15

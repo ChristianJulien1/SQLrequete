@@ -1,0 +1,58 @@
+1°) SELECT t.libelle AS "Type d'arme", COUNT(*) AS "Nb d'arme"
+FROM arme a
+INNER JOIN typearme t ON t.idTypeArme=a.idTypeArme
+GROUP BY t.libelle
+
+2°) SELECT c.nom AS "Classe", c.description, COUNT(*) AS "NB Personnage"
+FROM classe c
+INNER JOIN personnage p ON c.idClasse=p.idClasse
+GROUP BY c.nom, c.description
+
+3°) SELECT p.nom, COUNT(*)
+FROM personnage p
+INNER JOIN dispose d ON d.idPersonnage=p.idPersonnage
+INNER JOIN arme a ON a.idArme = d.idArme
+GROUP BY p.nom
+
+4°) SELECT c.nom AS "Classe", p.nom, COUNT(*)
+FROM personnage p
+INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+INNER JOIN arme a ON a.idArme = d.idArme
+INNER JOIN classe c ON c.idClasse = p.idClasse
+WHERE c.nom = "Guerrier"
+GROUP BY p.nom
+
+5°) SELECT a.nom, COUNT(p.idPersonnage)
+FROM arme a
+LEFT JOIN dispose d ON d.idArme = a.idArme
+LEFT JOIN personnage p ON p.idPersonnage = d.idPersonnage
+GROUP BY a.nom
+
+6°) SELECT c.nom AS "Classe", AVG(p.level) AS "Niveau moyen"
+FROM classe c
+INNER JOIN personnage p ON c.idClasse = p.idClasse
+GROUP BY c.nom
+
+****************
+HAVING
+****************
+
+1°) SELECT c.nom AS "Classe", AVG(p.level) AS "Niveau moyen"
+FROM classe c
+INNER JOIN personnage p ON c.idClasse = p.idClasse
+GROUP BY c.nom
+HAVING AVG(p.level) > 9
+
+2°) SELECT a.nom, COUNT(p.idPersonnage)
+FROM arme a
+INNER JOIN dispose d ON d.idArme = a.idArme
+INNER JOIN personnage p ON p.idPersonnage = d.idPersonnage
+GROUP BY a.nom
+HAVING COUNT(p.idPersonnage)<=2
+
+3°) SELECT t.libelle AS "Type", COUNT(a.idArme) AS "NB Arme"
+FROM typearme t
+LEFT JOIN arme a ON t.idTypeArme = a.idTypeArme
+WHERE t.estDistance = false
+GROUP BY t.libelle
+HAVING COUNT(a.idArme)<=1

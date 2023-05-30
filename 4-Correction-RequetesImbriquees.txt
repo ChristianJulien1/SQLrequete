@@ -1,0 +1,34 @@
+****************************************************************************************
+Les requêtes imbriquées
+****************************************************************************************
+
+1°) 
+SELECT a.nom, a.degat
+FROM arme a
+WHERE a.degat > (SELECT AVG(degat)
+                 FROM arme)
+
+2°)
+SELECT * 
+FROM personnage
+WHERE level < (SELECT AVG(level)
+               FROM personnage)
+
+3°)
+SELECT *
+FROM personnage p
+WHERE p.level >(SELECT AVG(level)
+                FROM personnage p
+                INNER JOIN classe c ON p.idClasse = c.idClasse
+                WHERE c.nom = "Archer")
+****************************************************************************************
+Des requêtes imbriquées plus complexes
+****************************************************************************************
+
+4°)
+SELECT MAX(valeur) 
+FROM (SELECT t.libelle, COUNT(*) AS "valeur"
+    FROM arme a
+    INNER JOIN typearme t ON t.idTypeArme = a.idTypeArme
+    WHERE t.estDistance = true
+    GROUP BY t.libelle) v

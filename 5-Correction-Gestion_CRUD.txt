@@ -1,0 +1,71 @@
+****************************************************************************************
+Gestion des tables
+****************************************************************************************
+1°)CREATE TABLE attaque
+(
+    idAttaque INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(60)
+)
+
+==> Pour affacer la table
+
+DROP TABLE attaque 
+
+2°) 
+ALTER TABLE attaque
+ADD baseDegat INT,
+ADD test TINYINT
+
+3°)
+ALTER TABLE attaque 
+MODIFY test varchar(50)
+
+4)°
+ALTER TABLE attaque 
+CHANGE test toto INT
+
+5°)
+ALTER TABLE attaque
+DROP toto
+
+6°)
+CREATE TABLE utilise(
+    idAttaque int NOT NULL,
+    idPersonnage int NOT NULL,
+    levelAttaque int,
+    PRIMARY KEY(idAttaque, idPersonnage),
+    CONSTRAINT FK_ATTAQUE_UTILISE FOREIGN KEY (idAttaque) REFERENCES attaque(idAttaque),
+    CONSTRAINT FK_PERSONNAGE_UTILISE FOREIGN KEY(idPersonnage) REFERENCES personnage(idPersonnage)  
+)
+
+****************************************************************************************
+Gestion des données
+****************************************************************************************
+7°)
+INSERT INTO attaque(nom, baseDegat)VALUES('attaque1',5);
+INSERT INTO attaque(nom, baseDegat)VALUES('attaque2',10);
+INSERT INTO attaque(nom, baseDegat)VALUES('attaque3',15);
+INSERT INTO attaque(nom, baseDegat)VALUES('attaque4',20);
+
+INSERT INTO utilise(idAttaque,idPersonnage,levelAttaque)VALUES(1,1,2),(2,1,2),(2,2,1),(4,3,2),(1,4,3),(4,5,3);
+
+8°)
+UPDATE attaque
+SET baseDegat = 10
+
+9°)
+UPDATE attaque
+SET baseDegat = 50
+WHERE idAttaque = 2 OR idAttaque = 3
+
+10°)
+ALTER TABLE personnage
+ADD dateNaissance DATE
+
+UPDATE personnage SET dateNaissance= "2001-01-01" WHERE idPersonnage=1;
+UPDATE personnage SET dateNaissance= "2001-02-01" WHERE idPersonnage=2;
+UPDATE personnage SET dateNaissance= "2002-03-01" WHERE idPersonnage=3;
+UPDATE personnage SET dateNaissance= "2003-06-01" WHERE idPersonnage=4;
+UPDATE personnage SET dateNaissance= "2001-04-01" WHERE idPersonnage=5;
+UPDATE personnage SET dateNaissance= "2007-02-01" WHERE idPersonnage=6;
+UPDATE personnage SET dateNaissance= "2003-05-01" WHERE idPersonnage=7;
